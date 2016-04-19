@@ -15,7 +15,10 @@ docker rm -f $APPNAME-frontend
 
 # We don't need to fail the deployment because of a docker hub downtime
 set +e
-docker pull meteorhacks/meteord:base
+docker build -t meteorhacks/meteord:app - << EOF
+FROM meteorhacks/meteord:base
+RUN apt-get install install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+EOF
 set -e
 
 if [ "$USE_LOCAL_MONGO" == "1" ]; then

@@ -1,5 +1,5 @@
 {
-  "name": "mupx",
+  "name": "mupx-mod",
   "version": "1.5.2",
   "description": "Production Quality Meteor Deployments",
   "dependencies": {
@@ -15,9 +15,9 @@
     "minimist": "1.1.1"
   },
   "bin": {
-    "mupx": "./bin/mup"
+    "mupx-mod": "./bin/mup"
   },
-  "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
+  "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>, Mod by Blue Reef to add canvas/cairo support",
   "repository": {
     "type": "git",
     "url": "git://github.com/arunoda/meteor-up.git"
