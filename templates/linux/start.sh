@@ -15,10 +15,20 @@ docker rm -f $APPNAME-frontend
 
 # We don't need to fail the deployment because of a docker hub downtime
 set +e
-docker build -t meteorhacks/meteord:app - << EOF
+docker build -t meteorhacks/meteord:app - << EOF1
 FROM meteorhacks/meteord:base
+RUN cat /etc/*-release
+RUN sh -c "echo \
+deb http://ftp.cn.debian.org/debian wheezy main '\n' \
+deb-src http://ftp.cn.debian.org/debian wheezy main '\n' \
+deb http://ftp.cn.debian.org/debian wheezy-updates main '\n' \
+deb-src http://ftp.cn.debian.org/debian wheezy-updates main '\n' \
+deb http://security.debian.org/ wheezy/updates main '\n' \
+deb-src http://security.debian.org/ wheezy/updates main > /etc/apt/sources.list"
+RUN cat /etc/apt/sources.list
+RUN apt-get update
 RUN apt-get install -y --fix-missing libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
-EOF
+EOF1
 set -e
 
 if [ "$USE_LOCAL_MONGO" == "1" ]; then
