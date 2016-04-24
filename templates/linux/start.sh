@@ -24,10 +24,14 @@ deb-src http://ftp.cn.debian.org/debian wheezy main '\n' \
 deb http://ftp.cn.debian.org/debian wheezy-updates main '\n' \
 deb-src http://ftp.cn.debian.org/debian wheezy-updates main '\n' \
 deb http://security.debian.org/ wheezy/updates main '\n' \
-deb-src http://security.debian.org/ wheezy/updates main > /etc/apt/sources.list"
+deb-src http://security.debian.org/ wheezy/updates main '\n' \
+deb http://ftp.debian.org/debian sid main > /etc/apt/sources.list"
 RUN cat /etc/apt/sources.list
 RUN apt-get update
-RUN apt-get install -y --fix-missing libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+RUN apt-get install -y unifont
+RUN apt-get install -y --fix-missing libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ libc6-dev libpng12-0 libjpeg8 libgif4
+RUN npm install -g node-gyp
+RUN ldd --version
 EOF1
 set -e
 
@@ -70,3 +74,5 @@ fi
     --name=$APPNAME-frontend \
     meteorhacks/mup-frontend-server /start.sh
 <% } %>
+
+# deb http://ftp.debian.org/debian sid main

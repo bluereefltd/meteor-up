@@ -28,7 +28,7 @@ fi
 
 # setup the new version
 sudo mkdir current
-sudo cp tmp/bundle.tar.gz current/
+cp tmp/bundle.tar.gz current/
 
 # We temporarly stopped the binary building
 # Instead we are building for linux 64 from locally
@@ -37,20 +37,35 @@ sudo cp tmp/bundle.tar.gz current/
 # but not now
 
 # # rebuild binary module
-# cd current
-# sudo tar xzf bundle.tar.gz
+cd current
+sudo tar xzf bundle.tar.gz
+
+echo "FUCKKKK"
+
+cd $APP_DIR/current/bundle/programs/server/npm/node_modules
+sudo npm install canvas-captcha
+cd $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/npm-bcrypt/node_modules
+sudo npm install bcrypt
+cd $APP_DIR/current/bundle/programs/server
+sudo npm uninstall fibers
+sudo npm install fibers
+echo "stuff rebuilt"
+
+cd $APP_DIR
 
 # docker run \
 #   --rm \
 #   --volume=$APP_DIR/current/bundle/programs/server:/bundle \
 #   --entrypoint="/bin/bash" \
-#   meteorhacks/meteord:binbuild -c \
-#     "cd /bundle && bash /opt/meteord/rebuild_npm_modules.sh"
+#   meteorhacks/meteord:app -c \
+#     "cd /bundle/ && node npm-rebuild.js"
 
-# sudo rm bundle.tar.gz
-# sudo tar czf bundle.tar.gz bundle
-# sudo rm -rf bundle
-# cd ..
+cd current
+
+sudo rm bundle.tar.gz
+sudo tar czf bundle.tar.gz bundle
+sudo rm -rf bundle
+cd ..
 
 # start app
 sudo bash config/start.sh
