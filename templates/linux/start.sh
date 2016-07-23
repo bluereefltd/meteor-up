@@ -6,6 +6,7 @@ BUNDLE_PATH=$APP_PATH/current
 ENV_FILE=$APP_PATH/config/env.list
 PORT=<%= port %>
 USE_LOCAL_MONGO=<%= useLocalMongo? "1" : "0" %>
+USE_EXISTING_MONGO=<%= useExistingLocalMongo? "1" : "0" %>
 
 # Remove previous version of the app, if exists
 docker rm -f $APPNAME
@@ -30,12 +31,26 @@ RUN cat /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y unifont
 RUN apt-get install -y --fix-missing libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ libc6-dev libpng12-0 libjpeg8 libgif4
+RUN npm config set registry https://registry.npm.taobao.org
+RUN npm config set disturl https://npm.taobao.org/dist
 RUN npm install -g node-gyp
 RUN ldd --version
 EOF1
 set -e
 
-if [ "$USE_LOCAL_MONGO" == "1" ]; then
+if [ "$USE_EXISTING_MONGO" == "1" ]; then
+  docker run \
+    -d \
+    --restart=always \
+    --publish=$PORT:80 \
+    --volume=$BUNDLE_PATH:/bundle \
+    --env-file=$ENV_FILE \
+    --link=mongodb:mongodb \
+    --hostname="$HOSTNAME-$APPNAME" \
+    --env=MONGO_URL=mongodb://mongodb:27017/meteor \
+    --name=$APPNAME \
+    meteorhacks/meteord:app
+elif [ "$USE_LOCAL_MONGO" == "1" ]; then
   docker run \
     -d \
     --restart=always \

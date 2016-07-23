@@ -20,6 +20,7 @@ set -e
 APP_DIR=/opt/<%=appName %>
 
 # save the last known version
+echo "save the last known version"
 cd $APP_DIR
 if [[ -d current ]]; then
   sudo rm -rf last
@@ -27,6 +28,7 @@ if [[ -d current ]]; then
 fi
 
 # setup the new version
+echo "setup the new version"
 sudo mkdir current
 cp tmp/bundle.tar.gz current/
 
@@ -37,18 +39,23 @@ cp tmp/bundle.tar.gz current/
 # but not now
 
 # # rebuild binary module
+echo "rebuild binary modules"
 cd current
 sudo tar xzf bundle.tar.gz
 
-echo "FUCKKKK"
-
-cd $APP_DIR/current/bundle/programs/server/npm/node_modules
-sudo npm install canvas-captcha
-cd $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/npm-bcrypt/node_modules
-sudo npm install bcrypt
 cd $APP_DIR/current/bundle/programs/server
-sudo npm uninstall fibers
-sudo npm install fibers
+rm npm-shrinkwrap.json
+
+if [[ -d $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/captcha ]]; then
+  cd $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/captcha
+  sudo npm install canvas-captcha@2.0.0
+fi
+
+#cd $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/npm-bcrypt/node_modules
+#sudo npm install bcrypt
+# cd $APP_DIR/current/bundle/programs/server
+# sudo npm uninstall fibers
+# sudo npm install fibers
 echo "stuff rebuilt"
 
 cd $APP_DIR
@@ -65,6 +72,7 @@ cd current
 sudo rm bundle.tar.gz
 sudo tar czf bundle.tar.gz bundle
 sudo rm -rf bundle
+
 cd ..
 
 # start app
