@@ -46,9 +46,10 @@ sudo tar xzf bundle.tar.gz
 cd $APP_DIR/current/bundle/programs/server
 rm npm-shrinkwrap.json
 
-if [[ -d $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/captcha ]]; then
-  cd $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/captcha
-  sudo npm install canvas-captcha@2.0.0
+if [[ -d $APP_DIR/current/bundle/programs/server/npm/node_modules/canvas ]]; then
+  cd $APP_DIR/current/bundle/programs/server/npm
+  sudo npm uninstall canvas
+  sudo npm install canvas@1.4.0
 fi
 
 #cd $APP_DIR/current/bundle/programs/server/npm/node_modules/meteor/npm-bcrypt/node_modules
